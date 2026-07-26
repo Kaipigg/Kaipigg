@@ -1,0 +1,31 @@
+name: Generate Snake
+
+on:
+  # 定时更新，UTC 时间，换算北京时间早上8点
+  schedule:
+    - cron: "0 0 * * *"
+  # 手动触发
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Generate Snake SVG
+        uses: Platane/snk@master
+        with:
+          github_user_name: Kaipigg
+          output_svg: github-snake.svg
+          output_svg_dark: github-snake-dark.svg
+          svg_theme: catppuccin-latte
+          svg_dark_theme: catppuccin-mocha
+
+      - name: Push to output branch
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./
+          publish_branch: output
